@@ -1,0 +1,62 @@
+[
+  {
+    "id": "sh-3001", "source": "securityhub",
+    "type": "Policy:S3/BucketAnonymousAccessGranted",
+    "title": "S3 bucket allows anonymous access",
+    "description": "The S3 bucket acme-exports-public has a bucket policy that grants anonymous access to unauthenticated users. The bucket is publicly readable and its contents can be listed by anyone.",
+    "severity": 75,
+    "resource_type": "Bucket", "resource_id": "acme-exports-public",
+    "account_id": "123456789012", "region": "us-east-1",
+    "first_seen": "2026-10-27T08:00:00Z", "last_seen": "2026-10-27T08:30:00Z"
+  },
+  {
+    "id": "gd-2001", "source": "guardduty",
+    "type": "UnauthorizedAccess:IAMUser/InstanceCredentialExfiltration.OutsideAWS",
+    "title": "Instance credentials used outside AWS",
+    "description": "The IAM credentials belonging to user svc-backup were used to call AWS APIs from an external network. Instance credentials are expected to be used only from inside the account's own instances.",
+    "severity": 9.0,
+    "resource_type": "AccessKey", "resource_id": "svc-backup",
+    "account_id": "123456789012", "region": "us-east-1",
+    "first_seen": "2026-10-27T09:12:00Z", "last_seen": "2026-10-27T09:58:00Z"
+  },
+  {
+    "id": "gd-2002", "source": "guardduty",
+    "type": "UnauthorizedAccess:IAMUser/ConsoleLogin",
+    "title": "Console login without MFA",
+    "description": "User svc-backup signed in to the AWS Management Console from a new location without multi-factor authentication. The account policy requires MFA for console access.",
+    "severity": 7.0,
+    "resource_type": "AccessKey", "resource_id": "svc-backup",
+    "account_id": "123456789012", "region": "us-east-1",
+    "first_seen": "2026-10-27T10:20:00Z", "last_seen": "2026-10-27T10:21:00Z"
+  },
+  {
+    "id": "gd-4001", "source": "guardduty",
+    "type": "Recon:EC2/PortProbeUnprotectedPort",
+    "title": "Port probe against EC2 instance",
+    "description": "The EC2 instance i-0b1c2d3e4f5061728 was probed on port 8080 by an external scanner. A single probe is often background internet noise.",
+    "severity": 3.0,
+    "resource_type": "Instance", "resource_id": "i-0b1c2d3e4f5061728",
+    "account_id": "123456789012", "region": "us-east-1",
+    "first_seen": "2026-10-27T12:00:00Z", "last_seen": "2026-10-27T12:05:00Z"
+  },
+  {
+    "id": "gd-1001", "source": "guardduty",
+    "type": "CryptoCurrency:EC2/BitcoinTool.B!DNS",
+    "title": "Bitcoin mining activity on EC2 instance",
+    "description": "The EC2 instance i-0f7a2b9c41d3e5f60 queried the domain pool.bitminers.example, which is associated with a known Bitcoin mining pool. DNS activity of this kind is consistent with cryptocurrency mining running on the instance.",
+    "severity": 8.0,
+    "resource_type": "Instance", "resource_id": "i-0f7a2b9c41d3e5f60",
+    "account_id": "123456789012", "region": "us-east-1",
+    "first_seen": "2026-10-27T13:02:00Z", "last_seen": "2026-10-27T15:40:00Z"
+  },
+  {
+    "id": "gd-1002", "source": "guardduty",
+    "type": "UnauthorizedAccess:EC2/MaliciousIPCaller.Custom",
+    "title": "Instance communicating with a malicious IP",
+    "description": "The EC2 instance i-0f7a2b9c41d3e5f60 communicated with 203.0.113.77, an IP address on the account threat list. Instances do not normally communicate with addresses on this list.",
+    "severity": 6.5,
+    "resource_type": "Instance", "resource_id": "i-0f7a2b9c41d3e5f60",
+    "account_id": "123456789012", "region": "us-east-1",
+    "first_seen": "2026-10-27T14:10:00Z", "last_seen": "2026-10-27T16:05:00Z"
+  }
+]
