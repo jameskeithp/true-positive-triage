@@ -39,3 +39,5 @@ runbook requires explicit human approval first.
 - October 27, 2026: repository created empty. Meta Model API smoke test
   passed from the build laptop (model list and a chat completion on
   muse-spark-1.3, both HTTP 200).
+- October 28, 2026: Agent loop built. Run state saved after every turn (`runs/<run_id>.json`), six tools (ingest_findings, record_fact, set_checklist, draft_runbook, request_human_input, file_report), grounding enforced by exact-quote checks in code, verification inside file_report with refusal reasons and escalation after three refusals. Proven in sample mode: honest run files in 6 turns as pending approval; an empty filing is refused three times and escalated.
+ 
