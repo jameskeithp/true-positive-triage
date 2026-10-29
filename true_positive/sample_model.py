@@ -2,7 +2,9 @@
 
 Plays a fixed, honest triage of INC-002 (the two correlated GuardDuty
 findings) so the full loop runs end to end with no API key. Quotes are
-read from the findings themselves, never hard-coded.
+read from the findings themselves, never hard-coded. The checklist
+covers all nine reference kinds (coverage.py): kinds the findings
+evidence are settled with facts; the rest are na with honest reasons.
 """
 from __future__ import annotations
 
@@ -26,8 +28,26 @@ class SampleModel:
                     "args": {"claim": f"Evidence from {fid}", "finding_id": fid, "quote": desc[:80]}}
         if self.step == 4:
             return {"tool": "set_checklist", "args": {"items": [
-                {"item": "Primary finding evidenced", "status": "settled", "fact": 0},
-                {"item": "Correlated finding evidenced", "status": "settled", "fact": 1},
+                {"item": "Affected resource and account identified", "kind": "affected_resource",
+                 "status": "settled", "fact": 0},
+                {"item": "Credential abuse checked", "kind": "credential_abuse",
+                 "status": "settled", "fact": 0},
+                {"item": "Public exposure checked", "kind": "public_exposure",
+                 "status": "settled", "fact": 0},
+                {"item": "Severity and score rationale", "kind": "severity_rationale",
+                 "status": "na",
+                 "reason": "Score is computed by deterministic code from the finding severities and carried with the incident."},
+                {"item": "Timeline", "kind": "timeline",
+                 "status": "na",
+                 "reason": "First and last seen are carried on each finding at ingest (Oct 27: gd-2001 09:12-09:58Z, gd-2002 10:20-10:21Z)."},
+                {"item": "Containment step drafted", "kind": "containment",
+                 "status": "na", "reason": "Covered by runbook step 1: isolate the affected resource."},
+                {"item": "Remediation step drafted", "kind": "remediation",
+                 "status": "na", "reason": "Covered by runbook step 2: revoke the abused credentials."},
+                {"item": "Verification step drafted", "kind": "verification",
+                 "status": "na", "reason": "Covered by runbook step 4: confirm no second resource is affected."},
+                {"item": "Evidence gaps", "kind": "evidence_gaps",
+                 "status": "na", "reason": "None. Both findings are recorded as facts with exact quotes."},
             ]}}
         if self.step == 5:
             return {"tool": "draft_runbook", "args": {"text":
@@ -38,4 +58,3 @@ class SampleModel:
         return {"tool": "file_report", "args": {
             "summary": "Correlated credential abuse incident, evidenced by two findings.",
             "citations": [0, 1]}}
-

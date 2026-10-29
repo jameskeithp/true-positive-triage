@@ -2,13 +2,19 @@
 
 Checks (all must pass):
 - checklist exists and has no open items; settled items point at real facts
+- checklist covers every reference kind (see coverage.py); a missing
+  kind refuses the filing, naming only the kind to the model
 - a runbook draft exists
 - the report cites at least one fact, and every citation is a real fact
 - every recorded fact still traces to an exact quote in its finding
 A failed check refuses the filing with reasons. Three refusals escalate
-to a human. A filed report is pending approval; nothing executes.
+to a human. A filed report is pending approval; nothing executes. The
+filed report carries the checklist coverage percentage for the human
+reviewer.
 """
 from __future__ import annotations
+
+from ..coverage import coverage_pct, missing_kinds
 
 
 def _description(finding):
@@ -26,6 +32,8 @@ def run(state, ctx, summary: str, citations: list) -> dict:
             f = it["fact"]
             if f is None or not (0 <= f < len(state.facts)):
                 reasons.append(f"checklist item settled without a valid fact: {it['item']}")
+    for kind in missing_kinds(state.checklist):
+        reasons.append(f"checklist does not cover: {kind}")
     if not state.runbook_draft:
         reasons.append("no runbook draft recorded")
     if not citations:
@@ -46,7 +54,7 @@ def run(state, ctx, summary: str, citations: list) -> dict:
             return {"ok": False, "escalated": True, "reasons": reasons}
         return {"ok": False, "reasons": reasons}
     state.report = {"summary": summary, "citations": citations,
-                    "runbook": state.runbook_draft, "status": "pending_approval"}
+                    "runbook": state.runbook_draft, "status": "pending_approval",
+                    "coverage_pct": coverage_pct(state.checklist)}
     state.status = "filed"
     return {"ok": True, "report_status": "pending_approval"}
-
